@@ -299,12 +299,15 @@ class HomeFragment : Fragment(), View.OnClickListener, View.OnLongClickListener 
     private fun openClockApp() {
         if (prefs.appPackageClock.isNotEmpty())
             launchApp(prefs.appNameClock, prefs.appPackageClock, android.os.Process.myUserHandle().toString())
+        else
+            openAlarmApp(requireContext())
     }
     private fun openCalendarApp() {
         if (prefs.appPackageCalendar.isNotEmpty())
             launchApp(prefs.appNameCalendar, prefs.appPackageCalendar, android.os.Process.myUserHandle().toString())
+        else
+            openCalendar(requireContext())
     }
-
 
     private fun lockPhone() {
         requireActivity().runOnUiThread {
