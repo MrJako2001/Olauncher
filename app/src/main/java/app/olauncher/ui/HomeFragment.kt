@@ -65,8 +65,8 @@ class HomeFragment : Fragment(), View.OnClickListener, View.OnLongClickListener 
         when (view.id) {
             R.id.lock -> {
             }
-            R.id.clock -> openAlarmApp(requireContext())
-            R.id.date -> openCalendar(requireContext())
+            R.id.clock -> openClockApp() // openAlarmApp(requireContext())
+            R.id.date -> openCalendarApp() // openCalendar(requireContext())
             R.id.setDefaultLauncher -> viewModel.resetDefaultLauncherApp(requireContext())
             else -> {
                 try { // Launch app
@@ -295,6 +295,16 @@ class HomeFragment : Fragment(), View.OnClickListener, View.OnLongClickListener 
             launchApp(prefs.appNameSwipeLeft, prefs.appPackageSwipeLeft, android.os.Process.myUserHandle().toString())
         else openCameraApp(requireContext())
     }
+
+    private fun openClockApp() {
+        if (prefs.appPackageClock.isNotEmpty())
+            launchApp(prefs.appNameClock, prefs.appPackageClock, android.os.Process.myUserHandle().toString())
+    }
+    private fun openCalendarApp() {
+        if (prefs.appPackageCalendar.isNotEmpty())
+            launchApp(prefs.appNameCalendar, prefs.appPackageCalendar, android.os.Process.myUserHandle().toString())
+    }
+
 
     private fun lockPhone() {
         requireActivity().runOnUiThread {

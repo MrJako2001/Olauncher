@@ -21,6 +21,7 @@ import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.helper.*
 import app.olauncher.listener.DeviceAdmin
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : Fragment(), View.OnClickListener, View.OnLongClickListener {
@@ -59,6 +60,7 @@ class SettingsFragment : Fragment(), View.OnClickListener, View.OnLongClickListe
         populateStatusBar()
         populateDateTime()
         populateSwipeApps()
+        populateClockApps()
         populateActionHints()
         initClickListeners()
         initObservers()
@@ -100,6 +102,9 @@ class SettingsFragment : Fragment(), View.OnClickListener, View.OnLongClickListe
             R.id.swipeLeftApp -> showAppListIfEnabled(Constants.FLAG_SET_SWIPE_LEFT_APP)
             R.id.swipeRightApp -> showAppListIfEnabled(Constants.FLAG_SET_SWIPE_RIGHT_APP)
 
+            R.id.clockApp -> showAppListIfEnabled(Constants.FLAG_SET_CLOCK_APP)
+            R.id.calendarApp -> showAppListIfEnabled(Constants.FLAG_SET_CALENDAR_APP)
+
             R.id.about -> openUrl(Constants.URL_ABOUT_OLAUNCHER)
             R.id.share -> shareApp()
             R.id.rate -> rateApp()
@@ -117,6 +122,10 @@ class SettingsFragment : Fragment(), View.OnClickListener, View.OnLongClickListe
             R.id.dailyWallpaper -> removeWallpaper()
             R.id.swipeLeftApp -> toggleSwipeLeft()
             R.id.swipeRightApp -> toggleSwipeRight()
+
+            R.id.clockApp -> toggleClockApp()
+            R.id.calendarApp -> toggleCalendarApp()
+
             R.id.toggleLock -> {
                 startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
                 deviceManager.removeActiveAdmin(componentName) // for backward compatibility
@@ -143,6 +152,8 @@ class SettingsFragment : Fragment(), View.OnClickListener, View.OnLongClickListe
         dateTime.setOnClickListener(this)
         swipeLeftApp.setOnClickListener(this)
         swipeRightApp.setOnClickListener(this)
+        clockApp.setOnClickListener(this)
+        calendarApp.setOnClickListener(this)
         themeColor.setOnClickListener(this)
         themeLight.setOnClickListener(this)
         themeDark.setOnClickListener(this)
@@ -167,6 +178,8 @@ class SettingsFragment : Fragment(), View.OnClickListener, View.OnLongClickListe
         alignment.setOnLongClickListener(this)
         swipeLeftApp.setOnLongClickListener(this)
         swipeRightApp.setOnLongClickListener(this)
+        clockApp.setOnLongClickListener(this)
+        calendarApp.setOnLongClickListener(this)
         toggleLock.setOnLongClickListener(this)
     }
 
@@ -185,6 +198,9 @@ class SettingsFragment : Fragment(), View.OnClickListener, View.OnLongClickListe
         })
         viewModel.updateSwipeApps.observe(viewLifecycleOwner, {
             populateSwipeApps()
+        })
+        viewModel.updateClockAndCalendar.observe(viewLifecycleOwner, {
+            populateClockApps()
         })
     }
 
@@ -207,6 +223,28 @@ class SettingsFragment : Fragment(), View.OnClickListener, View.OnLongClickListe
         } else {
             swipeRightApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColorTrans50))
             showToastShort(requireContext(), "Swipe right app disabled")
+        }
+    }
+
+    private fun toggleClockApp() {
+        prefs.clockAppEnabled = !prefs.clockAppEnabled
+        if (prefs.clockAppEnabled) {
+            clockApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColor))
+            showToastShort(requireContext(), "Clock app enabled")
+        } else {
+            clockApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColorTrans50))
+            showToastShort(requireContext(), "Clock app disabled")
+        }
+    }
+
+    private fun toggleCalendarApp() {
+        prefs.calendarAppEnabled = !prefs.calendarAppEnabled
+        if (prefs.calendarAppEnabled) {
+            calendarApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColor))
+            showToastShort(requireContext(), "Calendar app enabled")
+        } else {
+            calendarApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColorTrans50))
+            showToastShort(requireContext(), "Calendar app disabled")
         }
     }
 
@@ -451,9 +489,20 @@ class SettingsFragment : Fragment(), View.OnClickListener, View.OnLongClickListe
     private fun populateSwipeApps() {
         swipeLeftApp.text = prefs.appNameSwipeLeft
         swipeRightApp.text = prefs.appNameSwipeRight
+
         if (!prefs.swipeLeftEnabled)
             swipeLeftApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColorTrans50))
         if (!prefs.swipeRightEnabled)
+            swipeRightApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColorTrans50))
+    }
+
+    private fun populateClockApps() {
+        clockApp.text = prefs.appNameClock
+        calendarApp.text = prefs.appNameCalendar
+
+        if (!prefs.clockAppEnabled)
+            swipeLeftApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColorTrans50))
+        if (!prefs.calendarAppEnabled)
             swipeRightApp.setTextColor(requireContext().getColorFromAttr(R.attr.primaryColorTrans50))
     }
 
@@ -463,6 +512,14 @@ class SettingsFragment : Fragment(), View.OnClickListener, View.OnLongClickListe
             return
         }
         if ((flag == Constants.FLAG_SET_SWIPE_RIGHT_APP) and !prefs.swipeRightEnabled) {
+            showToastShort(requireContext(), "Long press to enable")
+            return
+        }
+        if ((flag == Constants.FLAG_SET_CALENDAR_APP) and !prefs.clockAppEnabled) {
+            showToastShort(requireContext(), "Long press to enable")
+            return
+        }
+        if ((flag == Constants.FLAG_SET_CALENDAR_APP) and !prefs.calendarAppEnabled) {
             showToastShort(requireContext(), "Long press to enable")
             return
         }

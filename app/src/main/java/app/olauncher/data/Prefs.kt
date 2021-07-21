@@ -22,6 +22,8 @@ class Prefs(context: Context) {
     private val DATE_TIME = "DATE_TIME"
     private val SWIPE_LEFT_ENABLED = "SWIPE_LEFT_ENABLED"
     private val SWIPE_RIGHT_ENABLED = "SWIPE_RIGHT_ENABLED"
+    private val CLOCK_APP_ENABLED = "CLOCK_APP_ENABLED"
+    private val CALENDAR_APP_ENABLED = "CALENDAR_APP_ENABLED"
     private val SCREEN_TIMEOUT = "SCREEN_TIMEOUT"
     private val HIDDEN_APPS = "HIDDEN_APPS"
     private val HIDDEN_APPS_UPDATED = "HIDDEN_APPS_UPDATED"
@@ -59,6 +61,13 @@ class Prefs(context: Context) {
     private val APP_PACKAGE_SWIPE_RIGHT = "APP_PACKAGE_SWIPE_RIGHT"
     private val APP_USER_SWIPE_LEFT = "APP_USER_SWIPE_LEFT"
     private val APP_USER_SWIPE_RIGHT = "APP_USER_SWIPE_RIGHT"
+
+    private val APP_NAME_CLOCK = "APP_NAME_USER_CLOCK"
+    private val APP_PACKAGE_CLOCK = "APP_PACKAGE_CLOCK"
+    private val APP_USER_CLOCK = "APP_USER_CLOCK"
+    private val APP_NAME_CALENDAR = "APP_NAME_USER_CALENDAR"
+    private val APP_PACKAGE_CALENDAR = "APP_PACKAGE_CALENDAR"
+    private val APP_USER_CALENDAR = "APP_USER_CALENDAR"
 
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_FILENAME, 0);
 
@@ -121,6 +130,14 @@ class Prefs(context: Context) {
     var swipeRightEnabled: Boolean
         get() = prefs.getBoolean(SWIPE_RIGHT_ENABLED, true)
         set(value) = prefs.edit().putBoolean(SWIPE_RIGHT_ENABLED, value).apply()
+
+    var clockAppEnabled: Boolean
+        get() = prefs.getBoolean(CLOCK_APP_ENABLED, true)
+        set(value) = prefs.edit().putBoolean(CLOCK_APP_ENABLED, value).apply()
+
+    var calendarAppEnabled: Boolean
+        get() = prefs.getBoolean(CALENDAR_APP_ENABLED, true)
+        set(value) = prefs.edit().putBoolean(CALENDAR_APP_ENABLED, value).apply()
 
     var themeColor: Int
         get() = prefs.getInt(THEME_COLOR, Constants.THEME_MODE_DARK)
@@ -246,6 +263,14 @@ class Prefs(context: Context) {
         get() = prefs.getString(APP_NAME_SWIPE_RIGHT, "PHONE").toString()
         set(value) = prefs.edit().putString(APP_NAME_SWIPE_RIGHT, value).apply()
 
+    var appNameClock: String
+        get() = prefs.getString(APP_NAME_CLOCK, "DEFAULT").toString()
+        set(value) = prefs.edit().putString(APP_NAME_CLOCK, value).apply()
+
+    var appNameCalendar: String
+        get() = prefs.getString(APP_NAME_CALENDAR, "DEFAULT").toString()
+        set(value) = prefs.edit().putString(APP_NAME_CALENDAR, value).apply()
+
     var appPackageSwipeLeft: String
         get() = prefs.getString(APP_PACKAGE_SWIPE_LEFT, "").toString()
         set(value) = prefs.edit().putString(APP_PACKAGE_SWIPE_LEFT, value).apply()
@@ -254,6 +279,14 @@ class Prefs(context: Context) {
         get() = prefs.getString(APP_PACKAGE_SWIPE_RIGHT, "").toString()
         set(value) = prefs.edit().putString(APP_PACKAGE_SWIPE_RIGHT, value).apply()
 
+    var appPackageClock: String
+        get() = prefs.getString(APP_PACKAGE_CLOCK, "").toString()
+        set(value) = prefs.edit().putString(APP_PACKAGE_CLOCK, value).apply()
+
+    var appPackageCalendar: String
+        get() = prefs.getString(APP_PACKAGE_CALENDAR, "").toString()
+        set(value) = prefs.edit().putString(APP_PACKAGE_CALENDAR, value).apply()
+
     var appUserSwipeLeft: String
         get() = prefs.getString(APP_USER_SWIPE_LEFT, "").toString()
         set(value) = prefs.edit().putString(APP_USER_SWIPE_LEFT, value).apply()
@@ -261,6 +294,14 @@ class Prefs(context: Context) {
     var appUserSwipeRight: String
         get() = prefs.getString(APP_USER_SWIPE_RIGHT, "").toString()
         set(value) = prefs.edit().putString(APP_USER_SWIPE_RIGHT, value).apply()
+
+    var appUserClock: String
+        get() = prefs.getString(APP_USER_CLOCK, "").toString()
+        set(value) = prefs.edit().putString(APP_USER_CLOCK, value).apply()
+
+    var appUserCalendar: String
+        get() = prefs.getString(APP_USER_CALENDAR, "").toString()
+        set(value) = prefs.edit().putString(APP_USER_CALENDAR, value).apply()
 
     fun getAppName(location: Int): String {
         return when (location) {
